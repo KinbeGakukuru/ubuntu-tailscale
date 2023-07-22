@@ -3,14 +3,19 @@
 # (C) Kinbe Gakukuru 2023.  Licensed under BSD-2.
 printf "Warning: Admin password is required for this installation!\nThis is your user password by default.\nNothing malicious is being downloaded. Stay calm!"
 
-# Original steps taken from offical Tailscale documentation: https://tailscale.com/kb/1187/install-ubuntu-2204/
-
-# Add Tailscale keys and repos to apt.
-curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/jammy.noarmor.gpg | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg >/dev/null
-curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/jammy.tailscale-keyring.list | sudo tee /etc/apt/sources.list.d/tailscale.list
-
 # Update system and install packages.
-sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install unattended-upgrades tailscale openssh-server ssh-import-id -y
+sudo apt-get update && sudo apt-get upgrade -y && sudo apt-get install \
+	curl \
+	unattended-upgrades \
+       	openssh-server \
+	ssh-import-id -y
+
+# Original steps taken from offical Tailscale documentation: https://tailscale.com/kb/1187/install-ubuntu-2204/
+# Add Tailscale keys and repos to apt.
+curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/jammy.noarmor.gpg | sudo tee /usr/share/keyrings/tailscale-archive-keyring.gpg > /dev/null
+curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/jammy.tailscale-keyring.list | sudo tee /etc/apt/sources.list.d/tailscale.list
+sudo apt-get update
+sudo apt-get install tailscale 
 
 # Configure SSH server.
 sudo systemctl enable ssh.service
